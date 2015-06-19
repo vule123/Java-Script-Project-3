@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<body onload="init()" onkeydown="keyPressed(event)">
+    <canvas id="glcanvas" width="480" height="480">
+        Your browser doesn't appear to support the HTML5 <code>&lt;canvas&gt;</code> element.
+    </canvas>
+    <img id="texture1" src="1.jpg" hidden=""></img>
+    <img id="texture2" src="1.jpg" hidden=""></img>
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        // position of the vertice represented by homogenerous coordinates
+        attribute vec4 a_position;
+        attribute vec3 a_textureCoord;
+
+        uniform mat4 u_modelViewMatrix;
+        uniform mat4 u_projectionMatrix;
+
+        uniform mat3 u_textureTransform;
+
+        // outputing color variable
+        varying vec2 v_color;
+
+        void main() {
+        // transfer the color of this vertice to the fragment shader
+        v_color = (u_textureTransform * a_textureCoord).xy;
+
+        gl_Position = u_projectionMatrix * u_modelViewMatrix * a_position;
+        }  
+    </script>
+       
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        // receive the color of pixels from the vertex shader
+        precision mediump float;
+
+        varying vec2 v_color;
+        uniform sampler2D u_texture;
+
+        void main() {
+        gl_FragColor = texture2D(u_texture, v_color);
+        }
+    </script>
+    <script type="text/javascript" src="webgl-utils.js"></script>
+    <script type="text/javascript" src="initShaders.js"></script>
+    <script type="text/javascript" src="MV.js"></script>
+    <script type="text/javascript" src="assignment3.js"></script>
+</body>
+</html>
